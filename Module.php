@@ -36,9 +36,12 @@ class Module extends \Aurora\System\Module\AbstractModule
 			$mResult = $this->ExecuteCommand(substr($aArgs['Text'], 1));
 			if ($mResult)
 			{
+				$oDate = new \DateTime();
+				$oDate->setTimezone(new \DateTimeZone('UTC'));
+				$sDate = $oDate->format('Y-m-d H:i:s');
 				$oChatModule = \Aurora\System\Api::GetModule('Chat');
 				$oChatModule->oApiChatManager->CreatePost(isset($aArgs['UserId']) ? $aArgs['UserId'] : 0, $mResult,
-						isset($aArgs['Date']) ? $aArgs['Date'] : '', true);
+						$sDate, true);
 			}
 		}
 	}
