@@ -34,30 +34,36 @@ class Module extends \Aurora\System\Module\AbstractModule
 	{
 		if (isset($aArgs['Text']) && $aArgs['Text'][0] === self::PREFIX)
 		{
-			$mResult = $this->ExecuteCommand(substr($aArgs['Text'], 1));
-			if ($mResult)
+			$sCommandResponce = $this->ExecuteCommand(substr($aArgs['Text'], 1));
+			if ($sCommandResponce)
 			{
 				$oDate = new \DateTime();
 				$oDate->setTimezone(new \DateTimeZone('UTC'));
 				$sDate = $oDate->format('Y-m-d H:i:s');
 				$oChatModule = \Aurora\System\Api::GetModule('Chat');
-				$oChatModule->oApiChatManager->CreatePost(isset($aArgs['UserId']) ? $aArgs['UserId'] : 0, $mResult,
-						$sDate, true);
+				$oChatModule->oApiPostsManager->CreatePost(
+					isset($aArgs['UserId']) ? $aArgs['UserId'] : 0,
+					$sCommandResponce,
+					$sDate,
+					$aArgs['ChannelUUID'],
+					true);
 			}
 		}
 	}
 	
 	protected function ExecuteCommand($sCommand)
 	{
+		$sResult = '';
 		switch (trim($sCommand))
 		{
 			case self::COMMAND_HELP:
 			case self::COMMAND_HELP_SHORT:
-				return $this->oApiCommandManager->getHelp();
+				$sResult = $this->oApiCommandManager->getHelp();
 				break;
 			case self::COMMAND_DATE:
-				return $this->oApiCommandManager->getDate();
+				$sResult = $this->oApiCommandManager->getDate();
 				break;
 		}
+		return $sResult;
 	}
 }
