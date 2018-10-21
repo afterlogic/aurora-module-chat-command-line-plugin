@@ -39,12 +39,11 @@ class Module extends \Aurora\System\Module\AbstractModule
 			{
 				$oDate = new \DateTime();
 				$oDate->setTimezone(new \DateTimeZone('UTC'));
-				$sDate = $oDate->format('Y-m-d H:i:s');
 				$oChatModule = \Aurora\System\Api::GetModule('Chat');
 				$oChatModule->oApiPostsManager->CreatePost(
 					isset($aArgs['UserId']) ? $aArgs['UserId'] : 0,
 					$sCommandResponce,
-					$sDate,
+					$oDate->getTimestamp(),
 					$aArgs['ChannelUUID'],
 					true);
 			}
